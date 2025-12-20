@@ -1,0 +1,97 @@
+@page "/redeem"
+@inject ICouponApiService CouponApi
+
+<PageTitle>Canjear Cupón</PageTitle>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Canjear Cupón</h3>
+                </div>
+                <div class="card-body">
+                    <EditForm Model="@model" OnValidSubmit="HandleRedeem">
+                        <DataAnnotationsValidator />
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Código del Cupón</label>
+                            <InputText @bind-Value="model.CouponCode" class="form-control" placeholder="Ej: PROMO2024" />
+                            <ValidationMessage For="@(() => model.CouponCode)" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">ID de Usuario</label>
+                            <InputText @bind-Value="model.UserId" class="form-control" placeholder="Ej: user@example.com" />
+                            <ValidationMessage For="@(() => model.UserId)" />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100" disabled="@isLoading">
+                            @if (isLoading)
+                            {
+                                <span class="spinner-border spinner-border-sm me-2"></span>
+                                <span>Procesando...</span>
+                            }
+                            else
+                            {
+                                <span>Canjear Cupón</span>
+                            }
+                        </button>
+                    </EditForm>
+
+                    @if (!string.IsNullOrEmpty(resultMessage))
+                    {
+                        <div class="alert @(resultSuccess ? "alert-success" : "alert-danger") mt-3" role="alert">
+                            <strong>@(resultSuccess ? "✓ Éxito" : "✗ Error")</strong>
+                            <p class="mb-0">@resultMessage</p>
+                            @if (resultSuccess && discount.HasValue)
+                            {
+                                <p class="mb-0 fw-bold">Descuento: @discount.Value%</p>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private RedeemModel model = new();
+    private bool isLoading;
+    private string? resultMessage;
+    private bool resultSuccess;
+    private decimal? discount;
+
+    private async Task HandleRedeem()
+    {
+        isLoading = true;
+        resultMessage = null;
+        
+        try
+        {
+            var result = await CouponApi.RedeemCouponAsync(model.CouponCode!, model.UserId!);
+            resultSuccess = result.Success;
+            resultMessage = result.Message;
+            discount = result.Discount;
+
+            if (result.Success)
+            {
+                model = new();
+            }
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    public class RedeemModel
+    {
+        [Required(ErrorMessage = "El código del cupón es requerido")]
+        public string? CouponCode { get; set; }
+
+        [Required(ErrorMessage = "El ID de usuario es requerido")]
+        public string? UserId { get; set; }
+    }
+}

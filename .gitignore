@@ -1,0 +1,84 @@
+## .NET
+
+bin/
+obj/
+out/
+publish/
+*.user
+*.suo
+*.cache
+*.log
+*.vspscc
+*.vssscc
+.vs/
+.vscode/
+
+## Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+
+## Visual Studio cache/options
+.vs/
+.vscode/
+*.userprefs
+*.user
+*.userosscache
+*.sln.docstates
+
+## Rider
+.idea/
+*.sln.iml
+
+## User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## NuGet
+*.nupkg
+*.snupkg
+**/packages/*
+!**/packages/build/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## Azure
+*.publishsettings
+*.azurePubxml
+PublishProfiles/
+*.pubxml
+*.azurePubxml.user
+
+## Test
+TestResults/
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+## Others
+*.swp
+*~
+*.cache
+*.log
+*.zip
+.DS_Store
+Thumbs.db
+
+## Node (si se usa npm para herramientas)
+node_modules/
+package-lock.json
+
+## Publish artifacts
+publish.zip
+*.dll
+*.exe
+*.pdb

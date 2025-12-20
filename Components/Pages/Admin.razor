@@ -1,0 +1,167 @@
+@page "/admin"
+@inject ICampaignApiService CampaignApi
+
+<PageTitle>Admin - Generar Cupones</PageTitle>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-dark text-white">
+                    <h3 class="mb-0">Panel Admin - Generar Cupones</h3>
+                </div>
+                <div class="card-body">
+                    <EditForm Model="@model" OnValidSubmit="HandleGenerate">
+                        <DataAnnotationsValidator />
+                        
+                        <div class="mb-3">
+                            <label class="form-label">ID de Campaña</label>
+                            <InputText @bind-Value="model.CampaignId" class="form-control" placeholder="CAMPAIGN-NY2026" />
+                            <ValidationMessage For="@(() => model.CampaignId)" />
+                            <small class="form-text text-muted">Ejemplos: CAMPAIGN-NY2026, CAMPAIGN-CM2025, CAMPAIGN-BF2025</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Cantidad de Cupones</label>
+                            <InputNumber @bind-Value="model.Quantity" class="form-control" />
+                            <ValidationMessage For="@(() => model.Quantity)" />
+                            <small class="form-text text-muted">Máximo recomendado: 100,000</small>
+                        </div>
+
+                        <button type="submit" class="btn btn-dark w-100" disabled="@isLoading">
+                            @if (isLoading)
+                            {
+                                <span class="spinner-border spinner-border-sm me-2"></span>
+                                <span>Generando cupones...</span>
+                            }
+                            else
+                            {
+                                <span>Generar Cupones Masivamente</span>
+                            }
+                        </button>
+                    </EditForm>
+
+                    @if (!string.IsNullOrEmpty(resultMessage))
+                    {
+                        <div class="alert @(resultSuccess ? "alert-success" : "alert-danger") mt-4" role="alert">
+                            <h5 class="alert-heading">@(resultSuccess ? "✓ Generación Exitosa" : "✗ Error en Generación")</h5>
+                            <p>@resultMessage</p>
+                            @if (generatedCount > 0)
+                            {
+                                <hr>
+                                <p class="mb-0 fw-bold">Cupones generados: @generatedCount</p>
+                            }
+                        </div>
+                    }
+
+                    @if (generationHistory.Any())
+                    {
+                        <div class="mt-4">
+                            <h5>Historial de Generaciones</h5>
+                            <table class="table table-sm table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Campaña</th>
+                                        <th>Cantidad</th>
+                                        <th>Estado</th>
+                                        <th>Hora</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in generationHistory.Take(10))
+                                    {
+                                        <tr>
+                                            <td>@item.CampaignId</td>
+                                            <td>@item.Quantity</td>
+                                            <td>
+                                                @if (item.Success)
+                                                {
+                                                    <span class="badge bg-success">Exitoso</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-danger">Error</span>
+                                                }
+                                            </td>
+                                            <td>@item.Timestamp.ToString("HH:mm:ss")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private GenerateModel model = new();
+    private bool isLoading;
+    private string? resultMessage;
+    private bool resultSuccess;
+    private int generatedCount;
+    private List<GenerationHistoryItem> generationHistory = new();
+
+    private async Task HandleGenerate()
+    {
+        isLoading = true;
+        resultMessage = null;
+        generatedCount = 0;
+        
+        try
+        {
+            var result = await CampaignApi.GenerateCouponsAsync(model.CampaignId, model.Quantity);
+            resultSuccess = result.Success;
+            resultMessage = result.Message;
+            
+            // Wait a bit and then fetch actual stats from database
+            if (result.Success)
+            {
+                await Task.Delay(2000); // Wait for generation to complete
+                var stats = await CampaignApi.GetCampaignStatsAsync(model.CampaignId);
+                generatedCount = stats.TotalGenerated;
+            }
+            else
+            {
+                generatedCount = result.Generated;
+            }
+
+            generationHistory.Insert(0, new GenerationHistoryItem
+            {
+                CampaignId = model.CampaignId,
+                Quantity = generatedCount,
+                Success = result.Success,
+                Timestamp = DateTime.Now
+            });
+
+            if (result.Success)
+            {
+                model.Quantity = 1000;
+            }
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    public class GenerateModel
+    {
+        [Required]
+        public string CampaignId { get; set; } = "CAMPAIGN-NY2026";
+
+        [Required]
+        [Range(1, 100000, ErrorMessage = "La cantidad debe estar entre 1 y 100,000")]
+        public int Quantity { get; set; } = 1000;
+    }
+
+    public class GenerationHistoryItem
+    {
+        public string CampaignId { get; set; } = string.Empty;
+        public int Quantity { get; set; }
+        public bool Success { get; set; }
+        public DateTime Timestamp { get; set; }
+    }
+}
