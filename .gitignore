@@ -13,6 +13,16 @@ publish/
 .vs/
 .vscode/
 
+# Sensitive configuration files
+**/appsettings.Development.json
+**/appsettings.*.json
+!**/appsettings.json
+!**/appsettings.Production.json
+**/secrets.json
+
+# User secrets
+**/secrets.Development.json
+
 ## Build results
 [Dd]ebug/
 [Rr]elease/
