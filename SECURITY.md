@@ -18,8 +18,8 @@ cd coupons-backend-dotnet/src/CampaignService/CampaignService
 dotnet user-secrets init
 
 # Set connection strings
-dotnet user-secrets set "ConnectionStrings:CampaignsDb" "your-connection-string-here"
-dotnet user-secrets set "ConnectionStrings:CouponsDb" "your-connection-string-here"
+dotnet user-secrets set "ConnectionStrings:CampaignsDb" "Server=tcp:YOUR_SERVER.database.windows.net,1433;Initial Catalog=campaigns-db;Persist Security Info=False;User ID=YOUR_USER;Password=YOUR_PASSWORD;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+dotnet user-secrets set "ConnectionStrings:CouponsDb" "Server=tcp:YOUR_SERVER.database.windows.net,1433;Initial Catalog=coupons-db;Persist Security Info=False;User ID=YOUR_USER;Password=YOUR_PASSWORD;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
 ```
 
 ### ✅ Use Azure Key Vault for production:

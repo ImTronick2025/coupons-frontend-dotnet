@@ -17,6 +17,7 @@ publish/
 **/appsettings.Development.json
 **/appsettings.*.json
 !**/appsettings.json
+# Production config allowed if using environment variables/Key Vault (no secrets in code)
 !**/appsettings.Production.json
 **/secrets.json
 

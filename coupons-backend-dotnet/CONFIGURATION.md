@@ -14,15 +14,15 @@ cp coupons-backend-dotnet/src/RedeemService/RedeemService/appsettings.Developmen
 ```bash
 cd coupons-backend-dotnet/src/CampaignService/CampaignService
 dotnet user-secrets init
-dotnet user-secrets set "ConnectionStrings:CampaignsDb" "Server=tcp:YOUR_SERVER.database.windows.net,1433;Initial Catalog=campaigns-db;User ID=YOUR_USER;Password=YOUR_PASSWORD;..."
-dotnet user-secrets set "ConnectionStrings:CouponsDb" "Server=tcp:YOUR_SERVER.database.windows.net,1433;Initial Catalog=coupons-db;User ID=YOUR_USER;Password=YOUR_PASSWORD;..."
+dotnet user-secrets set "ConnectionStrings:CampaignsDb" "Server=tcp:YOUR_SERVER.database.windows.net,1433;Initial Catalog=campaigns-db;Persist Security Info=False;User ID=YOUR_USER;Password=YOUR_PASSWORD;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+dotnet user-secrets set "ConnectionStrings:CouponsDb" "Server=tcp:YOUR_SERVER.database.windows.net,1433;Initial Catalog=coupons-db;Persist Security Info=False;User ID=YOUR_USER;Password=YOUR_PASSWORD;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
 ```
 
 #### Redeem Service:
 ```bash
 cd coupons-backend-dotnet/src/RedeemService/RedeemService
 dotnet user-secrets init
-dotnet user-secrets set "ConnectionStrings:CouponsDb" "Server=tcp:YOUR_SERVER.database.windows.net,1433;Initial Catalog=coupons-db;User ID=YOUR_USER;Password=YOUR_PASSWORD;..."
+dotnet user-secrets set "ConnectionStrings:CouponsDb" "Server=tcp:YOUR_SERVER.database.windows.net,1433;Initial Catalog=coupons-db;Persist Security Info=False;User ID=YOUR_USER;Password=YOUR_PASSWORD;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
 ```
 
 ### 3. Alternative: Edit appsettings.Development.json directly (Not Recommended)
