@@ -1,6 +1,16 @@
 # Configuration Guide
 
-## Local Development Setup
+## Frontend Setup
+
+### Copy example file
+```bash
+# From the repository root
+cp appsettings.Development.json.example appsettings.Development.json
+```
+
+Edit the file with your API service URLs if they differ from the defaults.
+
+## Backend Services Setup
 
 ### 1. Copy example files
 ```bash
