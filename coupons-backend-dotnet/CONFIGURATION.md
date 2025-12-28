@@ -4,8 +4,12 @@
 
 ### 1. Copy example files
 ```bash
-cp coupons-backend-dotnet/src/CampaignService/CampaignService/appsettings.Development.json.example coupons-backend-dotnet/src/CampaignService/CampaignService/appsettings.Development.json
-cp coupons-backend-dotnet/src/RedeemService/RedeemService/appsettings.Development.json.example coupons-backend-dotnet/src/RedeemService/RedeemService/appsettings.Development.json
+# From the repository root
+cp coupons-backend-dotnet/src/CampaignService/CampaignService/appsettings.Development.json.example \
+   coupons-backend-dotnet/src/CampaignService/CampaignService/appsettings.Development.json
+
+cp coupons-backend-dotnet/src/RedeemService/RedeemService/appsettings.Development.json.example \
+   coupons-backend-dotnet/src/RedeemService/RedeemService/appsettings.Development.json
 ```
 
 ### 2. Configure using .NET User Secrets (Recommended)
