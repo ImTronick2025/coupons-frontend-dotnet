@@ -13,6 +13,17 @@ publish/
 .vs/
 .vscode/
 
+# Sensitive configuration files
+**/appsettings.Development.json
+**/appsettings.*.json
+!**/appsettings.json
+# Production config allowed if using environment variables/Key Vault (no secrets in code)
+!**/appsettings.Production.json
+**/secrets.json
+
+# User secrets
+**/secrets.Development.json
+
 ## Build results
 [Dd]ebug/
 [Rr]elease/
